@@ -7,26 +7,28 @@ Source: https://sketchfab.com/3d-models/male-full-body-ecorche-ab11ebff89224f03b
 Title: Male Full Body Ecorche
 */
 
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three';
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('/humano.gltf')
   const bicepsRef = useRef();
-  
+  const [originalMaterial, setOriginalMaterial] = useState(); // Estado para guardar el material original
+
 
   function handleBicepsClick() {
     window.location = 'https://youtube.com';
   }
   function handleHover() {
-    bicepsRef.current.material.color.set("red");
+    setOriginalMaterial(bicepsRef.current.material); // Guardamos el material original
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    bicepsRef.current.material = hoverMaterial; // Usamos un nuevo material durante el desplazamiento
   }
 
   function handleHoverEnd() {
-    bicepsRef.current.material.color.set('white');
+    bicepsRef.current.material = originalMaterial; // Restablecemos el material original
   }
-
 
   return (
     <group {...props} dispose={null}>
@@ -35,7 +37,6 @@ export function Model(props) {
         <mesh 
           geometry={nodes.Object_3.geometry}
           material={materials.defaultMat_12} >
-            <meshStandardMaterial />
         </mesh>
         {/* HOMBROS */}
         <mesh 
@@ -143,7 +144,7 @@ export function Model(props) {
           ref={bicepsRef}
           geometry={nodes.Object_33.geometry} 
           material={materials.defaultMat}>
-            <meshStandardMaterial/>
+            {/* <meshStandardMaterial/> */}
         </mesh>
       </group>
     </group>

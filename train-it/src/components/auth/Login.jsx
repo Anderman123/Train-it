@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState('');
+
+  // Obtén el objeto "navigate" para poder redirigir al usuario
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,10 +30,13 @@ function Login() {
       if (response.data.success) {
         setMessage('Inicio de sesión exitoso');
         setMessageColor('green');
-        // Aquí puedes hacer algo con los datos del usuario,
-        // como guardarlos en el estado de la aplicación o en el almacenamiento local.
+
+        // Guarda el token de autenticación en el almacenamiento local
+        localStorage.setItem('authToken', response.data.token);
+
+        // Redirige al usuario a la página principal
+        navigate('/');
       } else {
-        // Aquí asumiremos que el servidor nos proporciona un mensaje de error adecuado
         setMessage('Error en el inicio de sesión: ' + response.data.message);
         setMessageColor('red');
       }
