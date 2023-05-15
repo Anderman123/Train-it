@@ -7,6 +7,8 @@ import Header from './components/Header/Header';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import { Model } from './components/Modelo3D/humano';
+import Publicaciones from './components/Publicaciones/Publicaciones';
+
 
 const CameraController = () => {
   const { camera } = useThree();
@@ -28,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/publicaciones/:categoria" element={<Publicaciones />} />
         {/* Agregar aquí más rutas si es necesario */}
         <Route path="/" element={
           <div style={{ width: '100', height: '650px' }}>
@@ -50,9 +53,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-

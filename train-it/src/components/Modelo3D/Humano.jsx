@@ -10,15 +10,17 @@ Title: Male Full Body Ecorche
 import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three';
+import { useNavigate } from 'react-router-dom';
+
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('/humano.gltf')
   const bicepsRef = useRef();
   const [originalMaterial, setOriginalMaterial] = useState(); // Estado para guardar el material original
-
+  const navigate  = useNavigate();
 
   function handleBicepsClick() {
-    window.location = 'https://youtube.com';
+    navigate('/publicaciones/biceps');
   }
   function handleHover() {
     setOriginalMaterial(bicepsRef.current.material); // Guardamos el material original
