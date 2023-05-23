@@ -6,7 +6,7 @@ import './App.css'
 import Header from './components/Header/Header';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
-import { Model } from './components/Modelo3D/humano';
+import { Model } from './components/Modelo3D/Humano';
 import Publicaciones from './components/Publicaciones/Publicaciones';
 
 
