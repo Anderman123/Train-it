@@ -33,7 +33,7 @@ function App() {
         <Route path="/publicaciones/:categoria" element={<Publicaciones />} />
         {/* Agregar aquí más rutas si es necesario */}
         <Route path="/" element={
-          <div style={{ width: '100', height: '650px' }}>
+          <div className='caja_humano' style={{ width: '100', height: '650px' }}>
             <Canvas camera={{ zoom: 0.9, position: [0, 10, 55] }}>
               <OrbitControls minDistance={10} maxDistance={50} />
               <ambientLight intensity={0.5} />

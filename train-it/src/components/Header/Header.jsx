@@ -16,7 +16,9 @@ export default function Header() {
 
   return (
     <header>
-      <img  className="logo" src={Logo}/>
+      <Link to="/">
+        <img className="logo" src={Logo} />
+      </Link>
       <div className="links">
         {authToken ? (
           // Si el usuario está autenticado, mostramos el enlace de Logout

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Register.css';
 
 function Register() {
   const [name, setName] = useState('');
@@ -48,22 +49,23 @@ function Register() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleSubmit}>
         <label>
           Nombre:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input className="login-input" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </label>
         <label>
           Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <br/>
+          <input className="login-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </label>
         <label>
           Contraseña:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input className="login-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </label>
-        <input type="submit" value="Registrarse" />
+        <input className="register-submit" type="submit" value="Registrarse" />
       </form>
-      <p style={{ color: messageColor }}>{message}</p>
+      <p className="login-message" style={{ color: messageColor }}>{message}</p>
     </>
   );
 }

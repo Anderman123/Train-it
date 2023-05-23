@@ -15,33 +15,129 @@ import { useNavigate } from 'react-router-dom';
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('/humano.gltf')
-  const bicepsRef = useRef();
-  const [originalMaterial, setOriginalMaterial] = useState(); // Estado para guardar el material original
   const navigate  = useNavigate();
 
-  function handleBicepsClick() {
-    navigate('/publicaciones/biceps');
-  }
+  const bicepsRef = useRef();
+  const gluteosRef = useRef();
+  const hombrosRef = useRef();
+  const gemelosRef = useRef();
+  const cuadricepsRef = useRef();
+  const antebrazoRef = useRef();
+
+  const [gluteosOriginalMaterial, setGluteosOriginalMaterial] = useState();
+  const [hombrosOriginalMaterial, setHombrosOriginalMaterial] = useState();
+  const [gemelosOriginalMaterial, setGemelosOriginalMaterial] = useState();
+  const [cuadricepsOriginalMaterial, setCuadricepsOriginalMaterial] = useState();
+  const [antebrazoOriginalMaterial, setAntebrazoOriginalMaterial] = useState();
+  const [originalMaterial, setOriginalMaterial] = useState(); // Estado para guardar el material original
+
+
   function handleHover() {
     setOriginalMaterial(bicepsRef.current.material); // Guardamos el material original
     const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
     bicepsRef.current.material = hoverMaterial; // Usamos un nuevo material durante el desplazamiento
   }
-
   function handleHoverEnd() {
     bicepsRef.current.material = originalMaterial; // Restablecemos el material original
   }
 
+  function handleGluteosHover() {
+    setGluteosOriginalMaterial(gluteosRef.current.material);
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    gluteosRef.current.material = hoverMaterial;
+  }
+  function handleGluteosHoverEnd() {
+    gluteosRef.current.material = gluteosOriginalMaterial;
+  }
+
+  function handleHombrosHover() {
+    setHombrosOriginalMaterial(hombrosRef.current.material);
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    hombrosRef.current.material = hoverMaterial;
+  }
+  function handleHombrosHoverEnd() {
+    hombrosRef.current.material = hombrosOriginalMaterial;
+  }
+  
+  function handleGemelosHover() {
+    setGemelosOriginalMaterial(gemelosRef.current.material);
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    gemelosRef.current.material = hoverMaterial;
+  }
+  function handleGemelosHoverEnd() {
+    gemelosRef.current.material = gemelosOriginalMaterial;
+  }
+  
+  
+  function handleCuadricepsHover() {
+    setCuadricepsOriginalMaterial(cuadricepsRef.current.material);
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    cuadricepsRef.current.material = hoverMaterial;
+  }
+  
+  function handleCuadricepsHoverEnd() {
+    cuadricepsRef.current.material = cuadricepsOriginalMaterial;
+  }
+  
+  
+
+  
+  function handleAntebrazoHover() {
+    setAntebrazoOriginalMaterial(antebrazoRef.current.material);
+    const hoverMaterial = new THREE.MeshStandardMaterial({color: "white"});
+    antebrazoRef.current.material = hoverMaterial;
+  }
+  
+  function handleAntebrazoHoverEnd() {
+    antebrazoRef.current.material = antebrazoOriginalMaterial;
+  }
+
+
+
+
+  function handleBicepsClick() {
+    navigate('/publicaciones/biceps');
+  }
+
+  function handleGluteosClick() {
+    navigate('/publicaciones/gluteos');
+  }
+  
+  function handleHombrosClick() {
+    navigate('/publicaciones/hombros');
+  }
+  
+  function handleGemelosClick() {
+    navigate('/publicaciones/gemelos');
+  }
+  
+  function handleCuadricepsClick() {
+    navigate('/publicaciones/cuadriceps');
+  }
+  
+  
+  function handleAntebrazoClick() {
+    navigate('/publicaciones/antebrazo');
+  }
+  
   return (
     <group {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         {/* GLUTEOS */}
         <mesh 
+          onPointerOver={handleGluteosHover}
+          onPointerOut={handleGluteosHoverEnd}
+          ref={gluteosRef}
+          onClick={handleGluteosClick}
           geometry={nodes.Object_3.geometry}
           material={materials.defaultMat_12} >
         </mesh>
         {/* HOMBROS */}
         <mesh 
+          onPointerOver={handleHombrosHover}
+          onPointerOut={handleHombrosHoverEnd}
+          ref={hombrosRef}
+          onClick={handleHombrosClick}
           geometry={nodes.Object_5.geometry} 
           material={materials.defaultMat_11}>
 
@@ -49,6 +145,10 @@ export function Model(props) {
 
         {/* GEMELOS */}
         <mesh 
+          onPointerOver={handleGemelosHover}
+          onPointerOut={handleGemelosHoverEnd}
+          ref={gemelosRef}
+          onClick={handleGemelosClick}
           geometry={nodes.Object_7.geometry} 
           material={materials.defaultMat_10}>
 
@@ -70,29 +170,34 @@ export function Model(props) {
 
         {/* ESPALDA */}
         <mesh 
-        geometry={nodes.Object_13.geometry} 
-        material={materials.defaultMat_8}>
+          geometry={nodes.Object_13.geometry} 
+          material={materials.defaultMat_8}>
 
         </mesh>
 
         {/* CARA MUSCULOS */}
         <mesh 
-        geometry={nodes.Object_15.geometry} 
-        material={materials.defaultMat_7}>
+          geometry={nodes.Object_15.geometry} 
+          material={materials.defaultMat_7}>
 
         </mesh>
 
         {/* CUADRICEPS */}
         <mesh 
-        geometry={nodes.Object_17.geometry} 
-        material={materials.defaultMat_6}>
+          onPointerOver={handleCuadricepsHover}
+          onPointerOut={handleCuadricepsHoverEnd}
+          ref={cuadricepsRef}
+          onClick={handleCuadricepsClick}
+          geometry={nodes.Object_17.geometry} 
+          material={materials.defaultMat_6}>
 
         </mesh>
 
         {/* CUELLO */}
         <mesh 
-        geometry={nodes.Object_19.geometry} 
-        material={materials.defaultMat_5}>
+
+          geometry={nodes.Object_19.geometry} 
+          material={materials.defaultMat_5}>
 
         </mesh>
 
@@ -112,8 +217,9 @@ export function Model(props) {
 
         {/* TIBIALIS (PARTE FRONTAL DE PIERNA) */}
         <mesh 
-        geometry={nodes.Object_25.geometry} 
-        material={materials.defaultMat_2}>
+
+          geometry={nodes.Object_25.geometry} 
+          material={materials.defaultMat_2}>
 
         </mesh>
 
@@ -128,11 +234,14 @@ export function Model(props) {
         <mesh 
           geometry={nodes.Object_29.geometry} 
           material={materials.material_0}>
-
         </mesh>
 
         {/* ANTEBRAZO */}
         <mesh 
+          onPointerOver={handleAntebrazoHover}
+          onPointerOut={handleAntebrazoHoverEnd}
+          onClick={handleAntebrazoClick}
+          ref={antebrazoRef}
           geometry={nodes.Object_31.geometry} 
           material={materials.defaultMat_0}>
 
@@ -146,7 +255,6 @@ export function Model(props) {
           ref={bicepsRef}
           geometry={nodes.Object_33.geometry} 
           material={materials.defaultMat}>
-            {/* <meshStandardMaterial/> */}
         </mesh>
       </group>
     </group>
