@@ -217,10 +217,8 @@ export function Model(props) {
 
         {/* TIBIALIS (PARTE FRONTAL DE PIERNA) */}
         <mesh 
-
           geometry={nodes.Object_25.geometry} 
           material={materials.defaultMat_2}>
-
         </mesh>
 
         {/* ABDUCTORES */}

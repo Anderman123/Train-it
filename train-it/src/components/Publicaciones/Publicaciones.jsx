@@ -3,50 +3,85 @@ import { useParams, Route } from 'react-router-dom';
 import axios from 'axios';
 import './Publicaciones.css';
 
-
 const Publicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([]);
   const [categoriaId, setCategoriaId] = useState(null);
   const [usuarios, setUsuarios] = useState([]);
   const { categoria } = useParams();
+  const [editandoPostId, setEditandoPostId] = useState(null);
 
-  const [userId, setUserId] = useState("");
+
+
+  const userId = localStorage.getItem('userId'); // Recupera el ID del usuario
+  console.log(userId);
+
   const [descripcion, setDescripcion] = useState("");
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-  
+
+
+  const handleDeletePost = async (postId) => {
     try {
-      await axios.post('http://127.0.0.1:8000/api/posts', {
-        user_id: userId,
-        categoria_id: categoriaId,
+      await axios.delete(`http://127.0.0.1:8000/api/posts/${postId}`);
+      // Actualizar las publicaciones después de borrar una
+      setPublicaciones(publicaciones.filter(publicacion => publicacion.id !== postId));
+    } catch (error) {
+      console.error('Hubo un error al borrar la publicación', error);
+    }
+  };
+
+  const handleEditPost = async () => {
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/posts/${editandoPostId}`, {
         descripcion: descripcion
       });
-      // Aquí puedes agregar una función para actualizar las publicaciones
-      // tras agregar una nueva
-      // Por ejemplo:
-      // fetchPublicaciones();
-      window.location.reload();
+  
+      // Actualizar las publicaciones después de editar una
+      const actualizadasPublicaciones = publicaciones.map(publicacion => 
+        publicacion.id === editandoPostId ? {...publicacion, descripcion: descripcion} : publicacion
+      );
+      setPublicaciones(actualizadasPublicaciones);
+  
+      // Resetear los estados
+      setEditandoPostId(null);
+      setDescripcion('');
     } catch (error) {
-      console.error('Hubo un error al crear la publicación', error);
+      console.error('Hubo un error al editar la publicación', error);
     }
   };
   
+
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+  
+    if (editandoPostId) {
+      handleEditPost();
+    } else {
+      try {
+        await axios.post('http://127.0.0.1:8000/api/posts', {
+          user_id: userId,
+          categoria_id: categoriaId,
+          descripcion: descripcion
+        });
+  
+        window.location.reload();
+      } catch (error) {
+        console.error('Hubo un error al crear la publicación', error);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/usuario');
-        // Aquí estamos estableciendo el primer usuario de la lista.
         setUsuarios(response.data.data);
       } catch (error) {
         console.error('Hubo un error al obtener los datos del usuario', error);
       }
     };
+
     fetchUsuario();
   }, []);
-  // console.log(usuario.id);
-  // console.log(usuario.name);
-  // console.log(usuarios);
 
   useEffect(() => {
     const fetchCategoria = async () => {
@@ -54,10 +89,8 @@ const Publicaciones = () => {
         const response = await axios.get('http://127.0.0.1:8000/api/categorias');
         const categorias = response.data;
 
-        // Busca la categoría que coincide con la URL
         const categoriaEncontrada = categorias.find(cat => cat.nombre === categoria);
         if (categoriaEncontrada) {
-          // Guarda el ID de la categoría que coincide
           setCategoriaId(categoriaEncontrada.id);
         } else {
           console.log('Categoría no encontrada');
@@ -66,14 +99,10 @@ const Publicaciones = () => {
         console.error('Hubo un error al obtener las categorías', error);
       }
     };
+
     fetchCategoria();
-  }, [categoria]);  // Dependencia en 'categoria' para que se ejecute de nuevo si cambia
-  // console.log(categoriaId);
-  // console.log(categoriaId);
-  // console.log(categoriaId);
+  }, [categoria]);
 
-
-  
   useEffect(() => {
       const fetchData = async () => {
           const response = await axios.get('http://127.0.0.1:8000/api/posts');
@@ -89,19 +118,10 @@ const Publicaciones = () => {
       fetchData();
   }, []);
 
-
   return (
     <div>
       <div>
         <form onSubmit={handleFormSubmit}>
-          <select value={userId} onChange={(e) => setUserId(e.target.value)}>
-            {usuarios.map(usuario => (
-              <option key={usuario.id} value={usuario.id}>
-                {usuario.name}
-              </option>
-            ))}
-          </select>
-
           <textarea 
             value={descripcion} 
             onChange={(e) => setDescripcion(e.target.value)}
@@ -110,14 +130,7 @@ const Publicaciones = () => {
 
           <button type="submit">Publicar</button>
         </form>
-
-        {/* Aquí va el resto de tu JSX */}
       </div>
-      {/* <div className='Caja_publicacion'>
-          {usuarios.map(usuario => (
-            <p key={usuario.id}>{usuario.id}: {usuario.name}</p>
-          ))}
-      </div> */}
 
       {publicaciones.filter(publicacion => publicacion.categoria_id === categoriaId).map((publicacion) => {
         // Busca al usuario con el mismo id que publicacion.user_id
@@ -125,8 +138,6 @@ const Publicaciones = () => {
 
         return (
           <div className='Caja_publicacion' key={publicacion.id}>
-            {/* <p>User ID: {publicacion.user_id}</p> */}
-            {/* Si se encontró el usuario, muestra su nombre */}
             {publicacion.imagen && <img src={publicacion.imagen} alt="Imagen de publicación" />}
             {publicacion.video && <video src={publicacion.video} controls />}
 
@@ -137,11 +148,23 @@ const Publicaciones = () => {
               <p>Descripcion: {publicacion.descripcion}</p>
             </div>
 
+            {/* Solo muestra el botón de borrar si el usuario es el propietario de la publicación */}
+            {publicacion.user_id === Number(userId) && (
+              <>
+                <button onClick={() => handleDeletePost(publicacion.id)}>Borrar post</button>
+                <button onClick={() => {
+                  setEditandoPostId(publicacion.id);
+                  setDescripcion(publicacion.descripcion);
+                  window.scrollTo(0, 0);
+                }}>Editar post</button>
+              </>
+            )}
+
           </div>
         );
       })}
     </div>
   );
 };
-    
+
 export default Publicaciones;

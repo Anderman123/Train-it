@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { useAuth } from './AuthContext';  // Importa el Hook de autenticación
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,8 +10,8 @@ function Login() {
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState('');
 
-  // Obtén el objeto "navigate" para poder redirigir al usuario
-  const navigate = useNavigate();
+  const navigate = useNavigate();  // Obtén el objeto "navigate" para poder redirigir al usuario
+  const { setIsAuthenticated } = useAuth(); // Usa el Hook de autenticación
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,22 +24,25 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login', {
-        email,
-        password,
-      });
+      const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
 
       if (response.data.success) {
         setMessage('Inicio de sesión exitoso');
         setMessageColor('green');
 
         // Guarda el token de autenticación en el almacenamiento local
-        localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('authToken', response.data.authToken);
+        localStorage.setItem('userId', response.data.user.id);
+
+        // Actualiza el estado de autenticación
+        setIsAuthenticated(true);
 
         // Redirige al usuario a la página principal
         navigate('/');
+
+        window.location.reload();
       } else {
-        setMessage('Error en el inicio de sesión: ' + response.data.message);
+        setMessage(`Error en el inicio de sesión: ${response.data.message}`);
         setMessageColor('red');
       }
     } catch (error) {
