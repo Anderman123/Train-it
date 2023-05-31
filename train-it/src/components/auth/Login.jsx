@@ -33,6 +33,7 @@ function Login() {
         // Guarda el token de autenticación en el almacenamiento local
         localStorage.setItem('authToken', response.data.authToken);
         localStorage.setItem('userId', response.data.user.id);
+        localStorage.setItem('userRole', response.data.user.role);
 
         // Actualiza el estado de autenticación
         setIsAuthenticated(true);

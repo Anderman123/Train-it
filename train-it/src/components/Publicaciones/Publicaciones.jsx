@@ -13,7 +13,11 @@ const Publicaciones = () => {
 
 
   const userId = localStorage.getItem('userId'); // Recupera el ID del usuario
+  const userRole = localStorage.getItem('userRole'); // Recupera el ID del usuario
   console.log(userId);
+  console.log(userRole);
+  console.log(userRole);
+  console.log(userRole);
 
   const [descripcion, setDescripcion] = useState("");
 
@@ -149,7 +153,7 @@ const Publicaciones = () => {
             </div>
 
             {/* Solo muestra el botón de borrar si el usuario es el propietario de la publicación */}
-            {publicacion.user_id === Number(userId) && (
+            {(userRole === 'admin' || publicacion.user_id === Number(userId)) && (
               <>
                 <button onClick={() => handleDeletePost(publicacion.id)}>Borrar post</button>
                 <button onClick={() => {

@@ -5,7 +5,8 @@ import { OrbitControls, Html } from '@react-three/drei';
 import './App.css'
 import Header from './components/Header/Header';
 import Register from './components/auth/Register';
-import Login from './components/auth/Login';
+import Login from './components/auth/login';
+import Perfil from './components/auth/Perfil';
 import { AuthProvider } from './components/auth/AuthContext';
 import { Model } from './components/Modelo3D/Humano';
 import Publicaciones from './components/Publicaciones/Publicaciones';
@@ -38,6 +39,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/publicaciones/:categoria" element={<Publicaciones />} />
           {/* Agregar aquí más rutas si es necesario */}
           <Route path="/" element={

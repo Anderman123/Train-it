@@ -21,8 +21,10 @@ export default function Header() {
       </Link>
       <div className="links">
         {authToken ? (
-          // Si el usuario está autenticado, mostramos el enlace de Logout
-          <button onClick={logout}>Logout</button>
+          <>
+            <button onClick={logout}>Logout</button>
+            <Link to="/perfil">Perfil</Link>
+          </>
         ) : (
           // Si el usuario no está autenticado, mostramos los enlaces de Login y Register
           <>
