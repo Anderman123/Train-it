@@ -10,7 +10,7 @@ const Publicaciones = () => {
   const { categoria } = useParams();
   const [editandoPostId, setEditandoPostId] = useState(null);
 
-
+  
 
   const userId = localStorage.getItem('userId'); // Recupera el ID del usuario
   const userRole = localStorage.getItem('userRole'); // Recupera el ID del usuario
@@ -148,7 +148,7 @@ const Publicaciones = () => {
             {usuarioPublicacion && <p>@:{usuarioPublicacion.name}</p>}
             
             <div className='Caja_descripcion'>
-              <p>Categoria ID: {publicacion.categoria_id}</p>
+              <p>Nombre de la categoria: {categoria}</p>
               <p>Descripcion: {publicacion.descripcion}</p>
             </div>
 
