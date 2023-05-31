@@ -28,6 +28,10 @@ const Perfil = () => {
     }
   };
 
+  const toggleShowPassword = () => {
+    setMostrarContraseña(!mostrarContraseña);
+  };
+
   if (!usuario) {
     return <div>Cargando información del usuario...</div>
   }
@@ -36,10 +40,11 @@ const Perfil = () => {
     <div>
       <h2>Perfil de {usuario.name}</h2>
       <p>Email: {usuario.email}</p>
-      <p>Contraseña: <input type={mostrarContraseña ? "text" : "password"} value={usuario.password} readOnly />
-        <span onClick={() => setMostrarContraseña(!mostrarContraseña)}>
+      <p>Contraseña: 
+        <input type={mostrarContraseña ? 'text' : 'password'} value={usuario.password} readOnly />
+        <button onClick={toggleShowPassword}>
           {mostrarContraseña ? 'Ocultar' : 'Mostrar'}
-        </span>
+        </button>
       </p>
       <button onClick={handleBorrarCuenta} style={{color: 'white', backgroundColor: 'red'}}>Borrar cuenta</button>
     </div>
