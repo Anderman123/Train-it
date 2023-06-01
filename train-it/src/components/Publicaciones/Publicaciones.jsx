@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Route } from 'react-router-dom';
+import ModalImage from "react-modal-image";
 import axios from 'axios';
 import './Publicaciones.css';
 
@@ -34,27 +35,6 @@ const Publicaciones = () => {
     }
   };
 
-  const handleEditPost = async () => {
-    try {
-      await axios.put(`http://127.0.0.1:8000/api/posts/${editandoPostId}`, {
-        descripcion: descripcion,
-        video: video
-      });
-  
-      // Actualizar las publicaciones después de editar una
-      const actualizadasPublicaciones = publicaciones.map(publicacion => 
-        publicacion.id === editandoPostId ? {...publicacion, descripcion: descripcion} : publicacion
-      );
-      setPublicaciones(actualizadasPublicaciones);
-  
-      // Resetear los estados
-      setEditandoPostId(null);
-      setDescripcion('');
-    } catch (error) {
-      console.error('Hubo un error al editar la publicación', error);
-    }
-  };
-  
 
 
   const handleFormSubmit = async (event) => {
@@ -189,13 +169,21 @@ const Publicaciones = () => {
 
         return (
           <div className='Caja_publicacion' key={publicacion.id}>
-            {publicacion.imagen && <img src={publicacion.imagen} alt="Imagen de publicación" />}
-            {/* {publicacion.video && <video src={publicacion.video} controls />} */}
-            {embedUrl && <iframe src={embedUrl} title="Video de publicación" allowFullScreen />}
+            {publicacion.imagen && 
+              <ModalImage 
+                className='img_post'
+                small={publicacion.imagen} 
+                large={publicacion.imagen} 
+                alt="Imagen de publicación" 
+              />
+            }
 
-            {usuarioPublicacion && <p>@:{usuarioPublicacion.name}</p>}
+            {/* {publicacion.video && <video src={publicacion.video} controls />} */}
+            {embedUrl && <iframe className='vid_post' src={embedUrl} title="Video de publicación" allowFullScreen />}
+
             
             <div className='Caja_descripcion'>
+              {usuarioPublicacion && <p>@:{usuarioPublicacion.name}</p>}
               <p>Nombre de la categoria: {categoria}</p>
               <p>Descripcion: {publicacion.descripcion}</p>
             </div>
