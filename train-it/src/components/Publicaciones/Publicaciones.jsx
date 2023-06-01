@@ -9,6 +9,8 @@ const Publicaciones = () => {
   const [usuarios, setUsuarios] = useState([]);
   const { categoria } = useParams();
   const [editandoPostId, setEditandoPostId] = useState(null);
+  const [video, setVideo] = useState("");
+  const [imagen, setImagen] = useState(null);
 
   
 
@@ -35,7 +37,8 @@ const Publicaciones = () => {
   const handleEditPost = async () => {
     try {
       await axios.put(`http://127.0.0.1:8000/api/posts/${editandoPostId}`, {
-        descripcion: descripcion
+        descripcion: descripcion,
+        video: video
       });
   
       // Actualizar las publicaciones después de editar una
@@ -57,16 +60,36 @@ const Publicaciones = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
   
+    const formData = new FormData();
+    formData.append("user_id", userId);
+    formData.append("categoria_id", categoriaId);
+    formData.append("descripcion", descripcion);
+    formData.append("video", video);
+    if (imagen) {
+      formData.append("imagen", imagen);
+    }
+  
     if (editandoPostId) {
-      handleEditPost();
+      try {
+        // Si estás editando, haz una solicitud PUT en lugar de POST
+        await axios.put(`http://127.0.0.1:8000/api/posts/${editandoPostId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // Recarga la página o actualiza el estado para reflejar los cambios
+        window.location.reload();
+      } catch (error) {
+        console.error('Hubo un error al editar la publicación', error);
+      }
     } else {
       try {
-        await axios.post('http://127.0.0.1:8000/api/posts', {
-          user_id: userId,
-          categoria_id: categoriaId,
-          descripcion: descripcion
+        await axios.post('http://127.0.0.1:8000/api/posts', formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
-  
+    
         window.location.reload();
       } catch (error) {
         console.error('Hubo un error al crear la publicación', error);
@@ -122,6 +145,18 @@ const Publicaciones = () => {
       fetchData();
   }, []);
 
+  // Función para transformar la URL de YouTube a URL de embed
+  const getEmbedUrl = (url) => {
+    if (!url) return url;
+
+    try {
+      const videoId = new URL(url).searchParams.get("v");
+      return `https://www.youtube.com/embed/${videoId}`;
+    } catch {
+      return url; // Si no se puede transformar la URL, devolver la URL original
+    }
+  }
+
   return (
     <div>
       <div>
@@ -131,19 +166,32 @@ const Publicaciones = () => {
             onChange={(e) => setDescripcion(e.target.value)}
             placeholder="Escribe tu publicación aquí"
           />
+          <input 
+            type="text" 
+            value={video} 
+            onChange={(e) => setVideo(e.target.value)} 
+            placeholder="URL del video" 
+          />
+          <input
+            type="file"
+            onChange={(e) => setImagen(e.target.files[0])}
+            accept="image/*"
+          />
+          
 
           <button type="submit">Publicar</button>
         </form>
       </div>
 
       {publicaciones.filter(publicacion => publicacion.categoria_id === categoriaId).map((publicacion) => {
-        // Busca al usuario con el mismo id que publicacion.user_id
         const usuarioPublicacion = usuarios.find(usuario => usuario.id === publicacion.user_id);
+        const embedUrl = getEmbedUrl(publicacion.video);
 
         return (
           <div className='Caja_publicacion' key={publicacion.id}>
             {publicacion.imagen && <img src={publicacion.imagen} alt="Imagen de publicación" />}
-            {publicacion.video && <video src={publicacion.video} controls />}
+            {/* {publicacion.video && <video src={publicacion.video} controls />} */}
+            {embedUrl && <iframe src={embedUrl} title="Video de publicación" allowFullScreen />}
 
             {usuarioPublicacion && <p>@:{usuarioPublicacion.name}</p>}
             
