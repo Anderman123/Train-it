@@ -14,7 +14,7 @@
   }
   
   .Caja_publicacion:hover {
-    background-color: #676767;
+    background-color: #4b4b4b;
     transform: scale(1.05);
   }
   
@@ -31,7 +31,12 @@
     clear: both;
     margin-top: 20px;
     border: 2px solid #fff;
+    width: 90%;
     padding: 10px;
+    text-align: left;
+  }
+  .Caja_descripcion p {
+    margin: 2%;
   }
 form {
   color: white;
@@ -39,4 +44,10 @@ form {
 
 form {
   margin-top: 15%;
+}
+
+textarea {
+  width: 30%;
+  height: 100px;
+  margin-right: 2%;
 }
