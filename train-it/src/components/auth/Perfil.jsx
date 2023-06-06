@@ -8,6 +8,13 @@ const Perfil = () => {
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
+  // Verificar autenticación
+  useEffect(() => {
+    if (!localStorage.getItem('authToken')) {
+      history.push('/login');
+    }
+  }, [history]);
+
   useEffect(() => {
     const fetchUsuario = async () => {
       try {

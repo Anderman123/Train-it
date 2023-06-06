@@ -44,13 +44,8 @@
   .Caja_descripcion p {
     margin: 2%;
   }
-form {
-  color: white;
-}
 
-form {
-  margin-top: 15%;
-}
+
 
 textarea {
   width: 30%;
@@ -66,4 +61,61 @@ textarea {
   height: 270px;
   width: 37%;
 
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px auto;
+  margin-top: 8%;
+  padding: 20px;
+  background-color: #252525;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+}
+
+textarea,
+input[type="text"],
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #303030;
+  color: #f0f0f0;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: 150px;
+  resize: none;
+}
+
+input[type="text"]:focus,
+input[type="file"]:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px 0px #5588ff;
+}
+
+.boton {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #d7d7d7;
+  color: #606060;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.boton:hover {
+  background-color: #a1baeb;
+}
+
+.boton:active {
+  background-color: #45d83d;
 }

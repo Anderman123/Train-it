@@ -24,6 +24,12 @@ const Publicaciones = () => {
 
   const [descripcion, setDescripcion] = useState("");
 
+  // Verificar autenticación
+  useEffect(() => {
+    if (!localStorage.getItem('authToken')) {
+      history.push('/login');
+    }
+  }, [history]);
 
   const handleDeletePost = async (postId) => {
     try {
@@ -159,7 +165,7 @@ const Publicaciones = () => {
           />
           
 
-          <button type="submit">Publicar</button>
+          <button className='boton' type="submit">Publicar</button>
         </form>
       </div>
 
